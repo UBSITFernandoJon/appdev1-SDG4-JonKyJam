@@ -1,0 +1,25 @@
+<div class="card h-100 shadow-sm">
+  <img
+    [src]="getCoverUrl()"
+    class="card-img-top"
+    [alt]="book.title"
+    style="height: 200px; object-fit: cover;"
+  />
+  <div class="card-body">
+    <h6 class="card-title fw-bold">
+      {{ book.title | titlecase }}
+    </h6>
+    <p class="card-text text-muted small">
+      {{ book.author_name?.[0] | titlecase }}
+    </p>
+    <p class="card-text small">
+      📅 First Published:
+      {{ book.first_publish_year ?? 'Unknown' }}
+    </p>
+    <button
+      class="btn btn-success btn-sm w-100"
+      (click)="onSelect()">
+      View Details
+    </button>
+  </div>
+</div>

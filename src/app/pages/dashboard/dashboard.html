@@ -1,1 +1,50 @@
-<p>dashboard works!</p>
+<section class="py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success">📚 Education Resources</h2>
+    <span class="badge bg-success fs-6">SDG 4 — Quality Education</span>
+  </div>
+
+  <!-- Signal summary (uses computed signal) -->
+  <div class="alert alert-success" *ngIf="selectedBook()">
+    ✅ Selected: <strong>{{ selectedBook()?.title | titlecase }}</strong>
+    by {{ selectedBook()?.author_name?.[0] | titlecase }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Fetching books...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Books Grid using async pipe -->
+  <ng-container *ngIf="books$ | async as response">
+
+    <!-- turn off loading once data arrives -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let book of response.docs">
+
+        <!-- Child component with @Input and @Output -->
+        <app-book-card
+          [book]="book"
+          (bookSelected)="onBookSelected($event)">
+        </app-book-card>
+
+      </div>
+    </div>
+
+    <p class="text-muted mt-3 small">
+      Found {{ response.numFound | number }} results
+    </p>
+
+  </ng-container>
+
+</section>

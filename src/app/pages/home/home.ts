@@ -1,23 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class HomeComponent {
-  isLoggedIn = false;
-
-  login() {
-    localStorage.setItem('isLoggedIn', 'true');
-    this.isLoggedIn = true;
-  }
-
-  logout() {
-    localStorage.setItem('isLoggedIn', 'false');
-    this.isLoggedIn = false;
-  }
+  today = new Date();
+  tagline = 'quality education for all — sdg 4';
 }
