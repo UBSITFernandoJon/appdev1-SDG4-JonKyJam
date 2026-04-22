@@ -1,61 +1,63 @@
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark"> 
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <div class="container">
 
-    <!-- Brand -->
-    <a class="navbar-brand" routerLink="/">MyApp</a>
+    <a class="navbar-brand fw-bold" routerLink="/">
+      📚 EduTrack SDG 4
+    </a>
 
-    <!-- Toggle button (mobile) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01">
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar content -->
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      
-      <ul class="navbar-nav me-auto">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
 
-        <!-- Home -->
         <li class="nav-item">
           <a class="nav-link"
-             routerLink="/"
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{ exact: true }">
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
             Home
           </a>
         </li>
 
-        <!-- Dashboard -->
         <li class="nav-item">
           <a class="nav-link"
-             routerLink="/dashboard"
-             routerLinkActive="active">
+            routerLink="/dashboard"
+            routerLinkActive="active">
             Dashboard
           </a>
         </li>
 
-        <!-- About -->
         <li class="nav-item">
           <a class="nav-link"
-             routerLink="/about"
-             routerLinkActive="active">
+            routerLink="/about"
+            routerLinkActive="active">
             About
           </a>
         </li>
 
-        <!-- Resource (example dynamic route) -->
         <li class="nav-item">
           <a class="nav-link"
-             [routerLink]="['/resource', 1]"
-             routerLinkActive="active">
+            routerLink="/resource"
+            routerLinkActive="active">
             Resource
           </a>
         </li>
 
-      </ul>
+        <!-- Dark Mode Toggle -->
+        <li class="nav-item ms-2">
+          <button
+            class="btn btn-sm btn-outline-light"
+            (click)="toggleDarkMode()">
+            {{ isDarkMode() ? '☀️ Light' : '🌙 Dark' }}
+          </button>
+        </li>
 
+      </ul>
     </div>
+
   </div>
 </nav>
-
-<!-- Page content renders here -->
-<router-outlet></router-outlet>

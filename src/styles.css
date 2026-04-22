@@ -1,4 +1,35 @@
 @charset "UTF-8";
+/* SDG 4 Green Theme */
+:root {
+  --sdg-green: #4CAF50;
+  --sdg-dark: #2e7d32;
+  --sdg-light: #e8f5e9;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Responsive navbar brand */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+
+  .card-img-top {
+    height: 150px !important;
+  }
+}
+
+/* Footer always at bottom */
+footer {
+  margin-top: auto;
+}
 /*!
  * Bootswatch v5.3.8 (https://bootswatch.com)
  * Theme: solar

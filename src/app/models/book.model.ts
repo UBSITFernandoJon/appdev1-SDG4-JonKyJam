@@ -5,9 +5,12 @@ export interface Book {
   first_publish_year?: number;
   cover_i?: number;
   subject?: string[];
+  publisher?: string[];
+  language?: string[];
+  edition_count?: number;
+  number_of_pages_median?: number;
 }
 
-// Represents the full API response
 export interface BookSearchResponse {
   numFound: number;
   start: number;
