@@ -8,22 +8,34 @@ import { BookSearchResponse } from '../models/book.model';
 })
 export class EducationService {
 
-  // Use inject() — NOT constructor injection (required by rubric!)
   private http = inject(HttpClient);
-
   private baseUrl = 'https://openlibrary.org';
 
-  // Search books by subject relevant to SDG 4
+  // Search by subject (default)
   searchBooks(subject: string): Observable<BookSearchResponse> {
     return this.http
       .get<BookSearchResponse>(
-        `${this.baseUrl}/search.json?subject=${subject}&limit=10`
+        `${this.baseUrl}/search.json?subject=${subject}&limit=12`
       )
       .pipe(
         catchError((error) => {
-          console.error('API Error:', error);
           return throwError(
             () => new Error('Failed to load books. Please try again.')
+          );
+        })
+      );
+  }
+
+  // Search by title or keyword
+  searchByQuery(query: string): Observable<BookSearchResponse> {
+    return this.http
+      .get<BookSearchResponse>(
+        `${this.baseUrl}/search.json?q=${query}&limit=12`
+      )
+      .pipe(
+        catchError((error) => {
+          return throwError(
+            () => new Error('Failed to search books. Please try again.')
           );
         })
       );

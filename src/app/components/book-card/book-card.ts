@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Book } from '../../models/book.model';
 
 @Component({
@@ -11,17 +12,36 @@ import { Book } from '../../models/book.model';
 })
 export class BookCardComponent {
 
-  @Input() book!: Book;           // ← receives book from parent
-  @Output() bookSelected = new EventEmitter<Book>(); // ← sends book to parent
+  @Input() book!: Book;
+  @Input() isFavorite: boolean = false;
+  @Input() readingStatus: string = '';
+
+  @Output() bookSelected    = new EventEmitter<Book>();
+  @Output() toggleFavorite  = new EventEmitter<Book>();
+  @Output() addToReading    = new EventEmitter<{book: Book, status: string}>();
+
+  private router = inject(Router);
 
   onSelect() {
-    this.bookSelected.emit(this.book); // ← emit to parent when clicked
+    this.bookSelected.emit(this.book);
+    const bookId = this.book.key.replace('/works/', '');
+    this.router.navigate(['/resource', bookId], {
+      state: { book: this.book }
+    });
+  }
+
+  onFavorite() {
+    this.toggleFavorite.emit(this.book);
+  }
+
+  onAddToReading(status: string) {
+    this.addToReading.emit({ book: this.book, status });
   }
 
   getCoverUrl(): string {
     if (this.book.cover_i) {
       return `https://covers.openlibrary.org/b/id/${this.book.cover_i}-M.jpg`;
     }
-    return 'https://via.placeholder.com/150x200?text=No+Cover';
+    return 'https://placehold.co/150x200?text=No+Cover';
   }
 }
