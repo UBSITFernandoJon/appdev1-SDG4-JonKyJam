@@ -9,12 +9,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './about.css'
 })
 export class AboutComponent {
-  sdgFacts = [
-    '780 million adults worldwide cannot read or write.',
-    'Education is a fundamental human right.',
-    '617 million children lack basic literacy skills.',
-    'Quality education reduces poverty and inequality.',
-    'SDG 4 aims for inclusive and equitable education by 2030.'
+  Mission = [
+    'As JONKYJAM, a group of students from Baguio City, our mission is to create and maintain an educational website that offers free access to books and learning materials. We aim to support students in their studies by making education more convenient, inclusive, and available anytime and anywhere.'
+
+  ];
+
+  Vision = [
+    'To become a reliable and accessible educational platform that empowers students by providing free and quality learning resources, helping them achieve academic success and lifelong learning.'
+    
   ];
 
   currentYear = new Date().getFullYear();

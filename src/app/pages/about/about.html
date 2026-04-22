@@ -1,23 +1,36 @@
 <section class="py-5">
 
   <div class="text-center mb-5">
-    <h1 class="fw-bold text-success">🎯 About SDG 4</h1>
-    <h4 class="text-muted">Quality Education</h4>
+    <h1 class="fw-bold text-success">PROJECT: JONKYJAM</h1>
+    <h4 class="text-muted">SDG 4: Quality Education</h4>
     <p class="lead mt-3">
-      SDG 4 ensures inclusive and equitable quality education
-      and promotes lifelong learning opportunities for all.
+      The Project JonKyJam will provide you the one of the best 
     </p>
   </div>
 
-  <!-- SDG Facts -->
+ 
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h5 class="fw-bold text-success mb-3">📊 Key Facts</h5>
+      <h5 class="fw-bold text-success mb-3">Mission:</h5>
       <ul class="list-group">
         <li
           class="list-group-item"
-          *ngFor="let fact of sdgFacts">
-          📌 {{ fact }}
+          *ngFor="let fact of Mission">
+          {{ fact }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+   
+   <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h5 class="fw-bold text-success mb-3">Vision:</h5>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let fact of Vision">
+          {{ fact }}
         </li>
       </ul>
     </div>
