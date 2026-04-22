@@ -1,16 +1,40 @@
 <section class="text-center py-5">
   <h1 class="display-4 fw-bold text-success">JonKyJam</h1>
-  <p class="lead">SDG 4: </p>
+  <p class="lead">SDG 4: Quality Education</p>
 
   <p class="text-muted">
-    Today: {{ today | date:'fullDate' }}   <!-- date pipe -->
+    Today: {{ today | date:'fullDate' }}
   </p>
 
   <p class="text-uppercase text-success fw-bold">
-    {{ tagline | uppercase }}             <!-- uppercase pipe -->
+    {{ tagline | uppercase }}
   </p>
 
-  <a routerLink="/dashboard" class="btn btn-success btn-lg mt-3">
-    Browse Resources
-  </a>
+  <!-- 🔒 Alert if redirected by guard -->
+  <div *ngIf="returnUrl" class="alert alert-warning mt-4">
+    🔒 You need to log in to access that page.
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-3">
+    <a routerLink="/dashboard" class="btn btn-success btn-lg me-2">
+      Browse Resources
+    </a>
+
+    <!-- Show login only if NOT logged in -->
+    <button 
+      *ngIf="!isLoggedIn" 
+      class="btn btn-outline-success btn-lg"
+      (click)="login()">
+      Login
+    </button>
+
+    <!-- Optional logout -->
+    <button 
+      *ngIf="isLoggedIn" 
+      class="btn btn-danger btn-lg"
+      (click)="logout()">
+      Logout
+    </button>
+  </div>
 </section>
