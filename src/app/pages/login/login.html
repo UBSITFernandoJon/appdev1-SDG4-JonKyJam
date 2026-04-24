@@ -1,1 +1,50 @@
-<p>login works!</p>
+<!-- Box Carousel -->
+<section class="text-center py-5">
+
+  <h2 class="fw-bold text-success mb-4">Trending</h2>
+
+  <div class="d-flex align-items-center justify-content-center gap-3">
+
+    <!-- Left Arrow -->
+    <button
+      class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
+      style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
+      (click)="prev()"
+      [disabled]="current === 0">
+      &#8249;
+    </button>
+
+    <!-- Boxes -->
+    <div class="d-flex align-items-center gap-3 overflow-hidden">
+      <div
+        *ngFor="let box of boxes; let i = index"
+        class="rounded-3 d-flex align-items-center justify-content-center fw-medium"
+        [ngClass]="{
+          'bg-success text-white border-0 shadow':   getClass(i) === 'active',
+          'bg-light text-secondary border':          getClass(i) === 'adjacent',
+          'bg-light text-secondary border opacity-50': getClass(i) === 'far'
+        }"
+        [ngStyle]="{
+          width:  getSize(i) + 'px',
+          height: getSize(i) + 'px',
+          cursor: 'pointer',
+          transition: 'all 0.3s cubic-bezier(0.34,1.2,0.64,1)',
+          fontSize: getClass(i) === 'active' ? '14px' : '12px'
+        }"
+        (click)="setCurrent(i)">
+        {{ box }}
+      </div>
+    </div>
+
+    <!-- Right Arrow -->
+    <button
+      class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
+      style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
+      (click)="next()"
+      [disabled]="current === boxes.length - 1">
+      &#8250;
+    </button>
+
+  </div>
+
+</section>
