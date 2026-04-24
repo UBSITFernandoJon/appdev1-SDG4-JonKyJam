@@ -1,40 +1,63 @@
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">name</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse show" id="navbarColor01" style="">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Home
-              <span class="visually-hidden">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="dashboard">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="resource/:id">Details</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="about">About</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Separated link</a>
-            </div>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <input class="form-control me-sm-2" type="search" placeholder="Search">
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <div class="container">
+
+    <a class="navbar-brand fw-bold" routerLink="/">
+      JonKyJam
+    </a>
+
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+            Home
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/dashboard"
+            routerLinkActive="active">
+            Dashboard
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/about"
+            routerLinkActive="active">
+            About
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+            routerLink="/resource"
+            routerLinkActive="active">
+            Resource
+          </a>
+        </li>
+
+        <!-- Dark Mode Toggle -->
+        <li class="nav-item ms-2">
+          <button
+            class="btn btn-sm btn-outline-light"
+            (click)="toggleDarkMode()">
+            {{ isDarkMode() ? '☀️ Light' : '🌙 Dark' }}
+          </button>
+        </li>
+
+      </ul>
     </div>
-  </nav>
+
+  </div>
+</nav>

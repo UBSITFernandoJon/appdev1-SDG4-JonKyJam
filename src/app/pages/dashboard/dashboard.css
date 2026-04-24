@@ -1,0 +1,156 @@
+/* Header */
+h2 {
+    color: var(--sdg-green);
+    letter-spacing: 0.5px;
+  }
+  
+  /* Badge */
+  .badge.bg-success {
+    background: linear-gradient(135deg, var(--sdg-green), var(--sdg-light-green));
+    border-radius: 20px;
+    padding: 8px 14px;
+  }
+  
+  /* Alerts (info & success) */
+  .alert {
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+  
+  .alert-info {
+    background: #e3f2fd;
+    color: #0d47a1;
+  }
+  
+  .alert-success {
+    background: #e8f5e9;
+    color: var(--sdg-green);
+  }
+  
+  /* Search Bar */
+  .input-group input {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+  }
+  
+  .input-group input:focus {
+    border-color: var(--sdg-green);
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+  }
+  
+  .input-group .btn-success {
+    background: var(--sdg-green);
+    border: none;
+    transition: 0.3s;
+  }
+  
+  .input-group .btn-success:hover {
+    background: #1b5e20;
+  }
+  
+  .input-group .btn-outline-success {
+    border-color: var(--sdg-green);
+    color: var(--sdg-green);
+  }
+  
+  .input-group .btn-outline-success:hover {
+    background: var(--sdg-green);
+    color: white;
+  }
+  
+  /* Spinner */
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  /* Book Cards Container Spacing */
+  .row-cols-lg-4 .col {
+    transition: transform 0.3s ease;
+  }
+  
+  .row-cols-lg-4 .col:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Favorites Cards */
+  .card {
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;
+    transition: 0.3s;
+  }
+  
+  .card:hover {
+    background: #f1f8f4;
+    transform: scale(1.03);
+  }
+  
+  /* Reading List Sections */
+  h6 {
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  /* Reading List Items */
+  .list-group-item {
+    border: none;
+    border-left: 4px solid transparent;
+    transition: 0.3s;
+    font-size: 0.95rem;
+  }
+  
+  /* Status Colors */
+  .list-group-item:hover {
+    background: var(--sdg-accent);
+  }
+  
+  /* Specific Status Indicators */
+  .list-group-item:has(+ *) {
+    border-left-color: var(--sdg-green);
+  }
+  
+  /* To Read */
+  h6:contains("To Read") + ul .list-group-item {
+    border-left: 4px solid #90caf9;
+  }
+  
+  /* Reading */
+  h6:contains("Reading") + ul .list-group-item {
+    border-left: 4px solid #ffb74d;
+  }
+  
+  /* Finished */
+  h6:contains("Finished") + ul .list-group-item {
+    border-left: 4px solid #66bb6a;
+  }
+  
+  /* Small text tweaks */
+  .small {
+    font-size: 0.85rem;
+  }
+  
+  /* Smooth section spacing */
+  .mt-5, .mt-4 {
+    margin-top: 2.5rem !important;
+  }
+  
+  /* Responsive Improvements */
+  @media (max-width: 768px) {
+    .input-group {
+      flex-direction: column;
+    }
+  
+    .input-group input,
+    .input-group button {
+      width: 100%;
+      border-radius: 8px !important;
+      margin-bottom: 5px;
+    }
+  
+    .row-cols-lg-4 .col {
+      transform: none !important;
+    }
+  }

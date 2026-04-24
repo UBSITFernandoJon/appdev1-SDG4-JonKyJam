@@ -1,1 +1,145 @@
-<p>dashboard works!</p>
+<section class="py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold text-success">📚 Education Resources</h2>
+    <span class="badge bg-success fs-6">SDG 4 — Quality Education</span>
+  </div>
+
+  <!-- Computed Signal -->
+  <div class="alert alert-info py-2">
+    📊 {{ bookSummary() }}
+  </div>
+
+  <!-- Selected Book -->
+  <div class="alert alert-success py-2" *ngIf="selectedBook()">
+    ✅ Selected:
+    <strong>{{ selectedBook()?.title | titlecase }}</strong>
+    — {{ selectedBook()?.author_name?.[0] ?? 'Unknown' }}
+  </div>
+
+  <!-- Search Bar -->
+  <div class="input-group mb-4">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="🔍 Search books by title or subject..."
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="onSearch()"
+    />
+    <button class="btn btn-success" (click)="onSearch()">
+      Search
+    </button>
+    <button class="btn btn-outline-success" (click)="onReset()">
+      Reset
+    </button>
+  </div>
+
+  <!-- Main Content — driven by single observable -->
+  <ng-container *ngIf="booksState$ | async as state">
+
+    <!-- Loading State -->
+    <div *ngIf="state.loading" class="text-center py-5">
+      <div class="spinner-border text-success" role="status"></div>
+      <p class="mt-2 text-muted">Fetching books...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="state.error" class="alert alert-danger">
+      ⚠️ {{ state.error }}
+    </div>
+
+    <!-- Books Grid -->
+    <ng-container *ngIf="!state.loading && state.data">
+
+      <p class="text-muted small mb-3">
+        Found {{ state.data.numFound | number }} results
+      </p>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <div class="col" *ngFor="let book of state.data.docs">
+          <app-book-card
+            [book]="book"
+            [isFavorite]="isFavorite(book)"
+            [readingStatus]="getReadingStatus(book)"
+            (bookSelected)="onBookSelected($event)"
+            (toggleFavorite)="toggleFavorite($event)"
+            (addToReading)="addToReadingList($event.book, $event.status)">
+          </app-book-card>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </ng-container>
+
+  <!-- Favorites Section -->
+  <div class="mt-5" *ngIf="favorites().length > 0">
+    <h4 class="fw-bold text-success">
+      ⭐ Favorites ({{ favorites().length }})
+    </h4>
+    <div class="row row-cols-1 row-cols-md-4 g-3 mt-1">
+      <div class="col" *ngFor="let book of favorites()">
+        <div class="card p-2 shadow-sm">
+          <p class="mb-1 fw-bold small">
+            {{ book.title | titlecase }}
+          </p>
+          <p class="text-muted small mb-0">
+            {{ book.author_name?.[0] ?? 'Unknown' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reading List Section -->
+  <!-- Reading List Section -->
+<div class="mt-4" *ngIf="readingList().length > 0">
+  <h4 class="fw-bold text-success">📋 Reading List</h4>
+
+  <!-- To Read -->
+  <div class="mb-3">
+    <h6 class="text-muted">📌 To Read</h6>
+    <ul class="list-group">
+      <ng-container *ngFor="let item of readingList()">
+        <li class="list-group-item" *ngIf="item.status === 'To Read'">
+          {{ item.book.title | titlecase }}
+          <small class="text-muted ms-2">
+            — {{ item.book.author_name?.[0] ?? 'Unknown' }}
+          </small>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <!-- Reading -->
+  <div class="mb-3">
+    <h6 class="text-muted">📖 Reading</h6>
+    <ul class="list-group">
+      <ng-container *ngFor="let item of readingList()">
+        <li class="list-group-item" *ngIf="item.status === 'Reading'">
+          {{ item.book.title | titlecase }}
+          <small class="text-muted ms-2">
+            — {{ item.book.author_name?.[0] ?? 'Unknown' }}
+          </small>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <!-- Finished -->
+  <div class="mb-3">
+    <h6 class="text-muted">✅ Finished</h6>
+    <ul class="list-group">
+      <ng-container *ngFor="let item of readingList()">
+        <li class="list-group-item" *ngIf="item.status === 'Finished'">
+          {{ item.book.title | titlecase }}
+          <small class="text-muted ms-2">
+            — {{ item.book.author_name?.[0] ?? 'Unknown' }}
+          </small>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+</div>

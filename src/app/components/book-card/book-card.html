@@ -1,0 +1,86 @@
+<div class="card h-100 shadow-sm">
+
+  <img
+    [src]="getCoverUrl()"
+    class="card-img-top"
+    [alt]="book.title"
+    style="height: 180px; object-fit: cover;"
+  />
+
+  <div class="card-body d-flex flex-column">
+
+    <h6 class="card-title fw-bold small">
+      {{ book.title | titlecase }}
+    </h6>
+
+    <p class="card-text text-muted small mb-1">
+      ✍️ {{ book.author_name?.[0] ?? 'Unknown' }}
+    </p>
+
+    <p class="card-text small mb-2">
+      📅 {{ book.first_publish_year ?? 'Unknown' }}
+    </p>
+
+    <!-- Reading Status Badge -->
+    <span
+      class="badge mb-2"
+      [class.bg-warning]="readingStatus === 'To Read'"
+      [class.bg-primary]="readingStatus === 'Reading'"
+      [class.bg-success]="readingStatus === 'Finished'"
+      *ngIf="readingStatus">
+      {{ readingStatus }}
+    </span>
+
+    <!-- View Details Button -->
+    <button
+      class="btn btn-success btn-sm mt-auto mb-1"
+      (click)="onSelect()">
+      View Details
+    </button>
+
+    <!-- Favorite Button -->
+    <button
+      class="btn btn-sm mb-2"
+      [class.btn-warning]="isFavorite"
+      [class.btn-outline-warning]="!isFavorite"
+      (click)="onFavorite()">
+      {{ isFavorite ? '⭐ Favorited' : '☆ Favorite' }}
+    </button>
+
+    <!-- Reading List Buttons — replaces dropdown -->
+    <div class="d-flex flex-column gap-1">
+      <small class="text-muted">📋 Add to List:</small>
+      <div class="btn-group btn-group-sm w-100">
+
+        <button
+          class="btn"
+          [class.btn-warning]="readingStatus === 'To Read'"
+          [class.btn-outline-warning]="readingStatus !== 'To Read'"
+          (click)="onAddToReading('To Read')">
+          📌
+        </button>
+
+        <button
+          class="btn"
+          [class.btn-primary]="readingStatus === 'Reading'"
+          [class.btn-outline-primary]="readingStatus !== 'Reading'"
+          (click)="onAddToReading('Reading')">
+          📖
+        </button>
+
+        <button
+          class="btn"
+          [class.btn-success]="readingStatus === 'Finished'"
+          [class.btn-outline-success]="readingStatus !== 'Finished'"
+          (click)="onAddToReading('Finished')">
+          ✅
+        </button>
+
+      </div>
+      <small class="text-muted text-center" style="font-size: 0.65rem;">
+        {{ readingStatus || 'Not in list' }}
+      </small>
+    </div>
+
+  </div>
+</div>

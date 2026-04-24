@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomeComponent} from './pages/home/home';
-import { Dashboard } from './pages/dashboard/dashboard';
-import { Detail } from './pages/detail/detail';
-import { About } from './pages/about/about';
+
 import { NotFoundComponent } from './pages/not-found/not-found';
 import { authGuard } from './guards/auth-guard';
-
+import { DashboardComponent } from './pages/dashboard/dashboard';
+import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
+import { DetailComponent } from './pages/detail/detail';
+import { AboutComponent } from './pages/about/about';
 export const routes: Routes = [
   {
     path: '',
@@ -13,15 +14,16 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: Dashboard
+    component: DashboardComponent,
+    canDeactivate: [unsavedChangesGuard]  // ← add this
   },
   {
     path: 'resource/:id',        // ← URL parameter route (required!)
-    component: Detail
+    component: DetailComponent
   },
   {
     path: 'about',
-    component: About
+    component: AboutComponent
   },
   {
     path: '**',                  // ← Wildcard route (required!)
@@ -29,7 +31,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: Dashboard,
+    component: DashboardComponent,
     canActivate: [authGuard]   // ← add this line
   }
 ];
