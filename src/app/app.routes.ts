@@ -7,6 +7,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard';
 import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
 import { DetailComponent } from './pages/detail/detail';
 import { AboutComponent } from './pages/about/about';
+import { Login } from './pages/login/login';
 export const routes: Routes = [
   {
     path: '',
@@ -33,5 +34,9 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard]   // ← add this line
+  },
+  {
+    path: 'login',
+    component: Login
   }
 ];
