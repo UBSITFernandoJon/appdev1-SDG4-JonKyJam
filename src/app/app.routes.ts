@@ -27,16 +27,16 @@ export const routes: Routes = [
     component: AboutComponent
   },
   {
-    path: '**',                  // ← Wildcard route (required!)
-    component: NotFoundComponent
+    path: 'login',
+    component: Login
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard]   // ← add this line
-  },
+  }, 
   {
-    path: 'login',
-    component: Login
+    path: '**',                  // ← Wildcard route (required!)
+    component: NotFoundComponent
   }
 ];
