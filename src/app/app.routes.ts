@@ -27,12 +27,15 @@ export const routes: Routes = [
     path: 'about',
     component: AboutComponent
   },
-  
+  {
+    path: 'login',
+    component: Login
+  },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard]   // ← add this line
-  },
+  }, 
   {
     path: 'login',
     component: Login
