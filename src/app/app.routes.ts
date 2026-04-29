@@ -8,6 +8,7 @@ import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
 import { DetailComponent } from './pages/detail/detail';
 import { AboutComponent } from './pages/about/about';
 import { Login } from './pages/login/login';
+import { Contact } from './pages/contact/contact';
 export const routes: Routes = [
   {
     path: '',
@@ -26,10 +27,7 @@ export const routes: Routes = [
     path: 'about',
     component: AboutComponent
   },
-  {
-    path: '**',                  // ← Wildcard route (required!)
-    component: NotFoundComponent
-  },
+  
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -38,5 +36,14 @@ export const routes: Routes = [
   {
     path: 'login',
     component: Login
+  },
+  {
+    path: 'contact',
+    component: Contact
+  },
+
+  {
+    path: '**',                  // ← Wildcard route (required!)
+    component: NotFoundComponent
   }
 ];
