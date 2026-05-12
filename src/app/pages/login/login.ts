@@ -14,11 +14,11 @@ export class Login implements OnInit {
   private educationService = inject(EducationService);
 
   books: any[] = [];
+  recommendedBooks: any[] = [];
   genres: string[] = [];
   shelfCurrents: Record<string, number> = {};
   isLoading = true;
 
-  // Genres to search — one API call per genre
   private genreQueries = [
     'fiction',
     'science',
@@ -38,12 +38,15 @@ export class Login implements OnInit {
           completed++;
 
           if (completed === this.genreQueries.length) {
-            // Flatten all books into one array
             this.books = this.genreQueries.flatMap(g => results[g] ?? []);
-
-            // Build genre list and init shelf cursors
             this.genres = this.genreQueries;
-            this.shelfCurrents['all'] = 0;
+
+            // Pick 9 random books from the full pool
+            const shuffled = [...this.books].sort(() => Math.random() - 0.5);
+            this.recommendedBooks = shuffled.slice(0, 9);
+
+            // Init shelf cursors
+            this.shelfCurrents['recommended'] = 0;
             this.genres.forEach(g => this.shelfCurrents[g] = 0);
 
             this.isLoading = false;
@@ -61,9 +64,8 @@ export class Login implements OnInit {
   }
 
   getBooksForGenre(genre: string): any[] {
-    return genre === 'all'
-      ? this.books
-      : this.books.filter(b => b.genre === genre);
+    if (genre === 'recommended') return this.recommendedBooks;
+    return this.books.filter(b => b.genre === genre);
   }
 
   getCurrentIndex(genre: string): number {

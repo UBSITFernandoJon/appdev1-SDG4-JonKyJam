@@ -6,11 +6,11 @@
 <!-- Genre Carousels -->
 <div *ngIf="!isLoading" class="d-flex flex-column gap-5">
 
-  <!-- All Books Carousel -->
-  <div>
-    <h5 class="fw-semibold mb-3 ps-1">All Books</h5>
-    <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: 'all' }"/>
-  </div>
+  <!-- Recommended Books Carousel -->
+<div>
+  <h5 class="fw-semibold mb-3 ps-1">Recommended Books</h5>
+  <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: 'recommended' }"/>
+</div>
 
   <!-- One carousel per genre -->
   <div *ngFor="let genre of genres">
