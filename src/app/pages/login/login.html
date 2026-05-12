@@ -3,57 +3,86 @@
   Loading books...
 </div>
 
-<!-- Carousel -->
-<div *ngIf="!isLoading" class="d-flex align-items-center justify-content-center gap-3">
+<!-- Genre Carousels -->
+<div *ngIf="!isLoading" class="d-flex flex-column gap-5">
 
-  <!-- Left Arrow -->
-  <button
-    class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
-    style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
-    (click)="prev()"
-    [disabled]="current === 0">
-    &#8249;
-  </button>
+  <!-- Recommended Books Carousel -->
+<div>
+  <h5 class="fw-semibold mb-3 ps-1">Recommended Books</h5>
+  <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: 'recommended' }"/>
+</div>
 
-  <!-- Book Boxes -->
-  <div class="d-flex align-items-center gap-3 overflow-hidden">
-    <div
-      *ngFor="let book of books; let i = index"
-      class="rounded-3 overflow-hidden d-flex flex-column align-items-center justify-content-end"
-      [ngClass]="{
-        'shadow border-0': getClass(i) === 'active',
-        'border opacity-75':  getClass(i) === 'adjacent',
-        'border opacity-40':  getClass(i) === 'far'
-      }"
-      [ngStyle]="{
-        width:      getSize(i) + 'px',
-        height:     getSize(i) * 1.5 + 'px',
-        cursor:     'pointer',
-        transition: 'all 0.3s cubic-bezier(0.34,1.2,0.64,1)',
-        backgroundImage: 'url(' + getCover(book) + ')',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }"
-      (click)="setCurrent(i)">
-
-      <!-- Title tooltip on active -->
-      <div
-        *ngIf="getClass(i) === 'active'"
-        class="w-100 text-white text-center px-1 py-1"
-        style="background: rgba(0,0,0,0.55); font-size:10px; line-height:1.2;">
-        {{ book.title | slice:0:40 }}{{ book.title.length > 40 ? '...' : '' }}
-      </div>
-
-    </div>
+  <!-- One carousel per genre -->
+  <div *ngFor="let genre of genres">
+    <h5 class="fw-semibold mb-3 ps-1 text-capitalize">{{ genre }}</h5>
+    <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: genre }"/>
   </div>
 
-  <!-- Right Arrow -->
-  <button
-    class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
-    style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
-    (click)="next()"
-    [disabled]="current === books.length - 1">
-    &#8250;
-  </button>
-
 </div>
+
+<!-- Reusable Carousel Template -->
+<ng-template #carouselTpl let-genre>
+  <ng-container *ngIf="getBooksForGenre(genre) as shelf">
+
+    <!-- No results -->
+    <div *ngIf="shelf.length === 0" class="text-muted ps-1" style="font-size:13px;">
+      No books in this category.
+    </div>
+
+    <!-- Carousel -->
+    <div *ngIf="shelf.length > 0"
+      class="d-flex align-items-center justify-content-center gap-3">
+
+      <!-- Left Arrow -->
+      <button
+        class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
+        style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
+        (click)="prevShelf(genre)"
+        [disabled]="getCurrentIndex(genre) === 0">
+        &#8249;
+      </button>
+
+      <!-- Book Boxes -->
+      <div class="d-flex align-items-center gap-3 overflow-hidden">
+        <div
+          *ngFor="let book of shelf; let i = index"
+          class="rounded-3 overflow-hidden d-flex flex-column align-items-center justify-content-end"
+          [ngClass]="{
+            'shadow border-0': getShelfClass(genre, i) === 'active',
+            'border opacity-75':  getShelfClass(genre, i) === 'adjacent',
+            'border opacity-40':  getShelfClass(genre, i) === 'far'
+          }"
+          [ngStyle]="{
+            width:      getShelfSize(genre, i) + 'px',
+            height:     getShelfSize(genre, i) * 1.5 + 'px',
+            cursor:     'pointer',
+            transition: 'all 0.3s cubic-bezier(0.34,1.2,0.64,1)',
+            backgroundImage: 'url(' + getCover(book) + ')',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }"
+          (click)="setCurrentShelf(genre, i); onBookClick(book)">
+
+          <!-- Title on active -->
+          <div
+            *ngIf="getShelfClass(genre, i) === 'active'"
+            class="w-100 text-white text-center px-1 py-1"
+            style="background: rgba(0,0,0,0.55); font-size:10px; line-height:1.2;">
+            {{ book.title | slice:0:40 }}{{ book.title.length > 40 ? '...' : '' }}
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Arrow -->
+      <button
+        class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
+        style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
+        (click)="nextShelf(genre)"
+        [disabled]="getCurrentIndex(genre) === shelf.length - 1">
+        &#8250;
+      </button>
+
+    </div>
+  </ng-container>
+</ng-template>
