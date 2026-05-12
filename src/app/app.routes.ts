@@ -7,7 +7,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard';
 import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
 import { DetailComponent } from './pages/detail/detail';
 import { AboutComponent } from './pages/about/about';
-import { Login } from './pages/login/login';
+import { LoginComponent } from './pages/login/login';
 import { Contact } from './pages/contact/contact';
 export const routes: Routes = [
   {
@@ -29,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: Login
+    component: LoginComponent
   },
   {
     path: 'dashboard',
@@ -38,7 +38,7 @@ export const routes: Routes = [
   }, 
   {
     path: 'login',
-    component: Login
+    component: LoginComponent
   },
   {
     path: 'contact',
