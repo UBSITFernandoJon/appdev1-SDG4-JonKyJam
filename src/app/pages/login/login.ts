@@ -1,57 +1,46 @@
-import { Component, OnInit, inject } from '@angular/core';  // ✅ add OnInit, inject
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EducationService } from '../../services/education.service';
-import { BookSearchResponse } from '../../models/book.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrl: './login.css'
 })
-export class Login implements OnInit {  // ✅ keep "Login", add OnInit
+export class LoginComponent {
 
-  private educationService = inject(EducationService);  // ✅ inject service
+  private authService = inject(AuthService);
+  private router      = inject(Router);
+  private route       = inject(ActivatedRoute);
 
-  books: any[] = [];      // ✅ replaces the old "boxes" array
-  current = 0;
-  isLoading = true;
+  // Simple credentials — no forms module needed!
+  username = '';
+  password = '';
+  errorMsg = '';
 
-  ngOnInit(): void {
-    this.educationService.searchBooks('education').subscribe({
-      next: (res: BookSearchResponse) => {
-        this.books = res.docs.slice(0, 9);
-        this.current = Math.floor(this.books.length / 2);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.isLoading = false;
-      }
-    });
+  onUsernameInput(event: Event) {
+    this.username = (event.target as HTMLInputElement).value;
   }
 
-  getClass(i: number): string {
-    const d = Math.abs(i - this.current);
-    if (d === 0) return 'active';
-    if (d === 1) return 'adjacent';
-    return 'far';
+  onPasswordInput(event: Event) {
+    this.password = (event.target as HTMLInputElement).value;
   }
 
-  getSize(i: number): number {
-    const d = Math.abs(i - this.current);
-    if (d === 0) return 140;
-    if (d === 1) return 100;
-    return 72;
-  }
+  onLogin() {
+    // Simple credential check — no backend needed
+    if (this.username === 'admin' && this.password === 'sdg4') {
+      this.authService.login();
 
-  getCover(book: any): string {
-    return book.cover_i
-      ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-      : 'https://via.placeholder.com/100x150?text=No+Cover';
-  }
+      // Redirect to returnUrl if it exists, else go to dashboard
+      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl')
+        ?? '/dashboard';
+      this.router.navigate([returnUrl]);
 
-  setCurrent(i: number): void { this.current = i; }
-  prev(): void { if (this.current > 0) this.current--; }
-  next(): void { if (this.current < this.books.length - 1) this.current++; }
+    } else {
+      this.errorMsg = '❌ Invalid username or password. Try admin / sdg4';
+    }
+  }
 }
