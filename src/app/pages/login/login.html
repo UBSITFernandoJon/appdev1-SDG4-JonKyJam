@@ -1,88 +1,284 @@
-<!-- Loading state -->
-<div *ngIf="isLoading" class="text-center text-muted py-3">
-  Loading books...
-</div>
+<!-- Fonts -->
+<!--<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">-->
 
-<!-- Genre Carousels -->
-<div *ngIf="!isLoading" class="d-flex flex-column gap-5">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --parchment: #f5f0e8;
+    --amber: #c8873a;
+    --amber-glow: #e8a055;
+    --muted: #7a7068;
+    --surface: #1a1814;
+    --surface-2: #222018;
+    --border: rgba(200, 135, 58, 0.2);
+  }
 
-  <!-- Recommended Books Carousel -->
-<div>
-  <h5 class="fw-semibold mb-3 ps-1">Recommended Books</h5>
-  <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: 'recommended' }"/>
-</div>
+  .shelf-wrapper {
+    background: var(--surface);
+    min-height: 100vh;
+    padding: 2.5rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--parchment);
+  }
 
-  <!-- One carousel per genre -->
-  <div *ngFor="let genre of genres">
-    <h5 class="fw-semibold mb-3 ps-1 text-capitalize">{{ genre }}</h5>
-    <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: genre }"/>
+  /* Loading */
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 0;
+    color: var(--muted);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+
+  .loading-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%       { opacity: 1;   transform: scale(1.2); }
+  }
+
+  /* Section headers */
+  .shelf-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--parchment);
+    letter-spacing: 0.01em;
+    margin-bottom: 1rem;
+    padding-left: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .shelf-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .shelf-label .genre-pill {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--amber);
+    background: rgba(200, 135, 58, 0.12);
+    border: 1px solid var(--border);
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  /* Arrow buttons */
+  .shelf-arrow {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--amber);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+  }
+
+  .shelf-arrow:hover:not(:disabled) {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
+    transform: scale(1.08);
+  }
+
+  .shelf-arrow:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  /* Book spine effect */
+  .book-item {
+    border-radius: 4px 8px 8px 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    position: relative;
+    box-shadow: -3px 3px 10px rgba(0,0,0,0.5), inset -2px 0 6px rgba(0,0,0,0.3);
+  }
+
+  .book-item.active {
+    box-shadow: -4px 6px 24px rgba(200,135,58,0.3), inset -2px 0 6px rgba(0,0,0,0.3);
+    transform: translateY(-6px);
+  }
+
+  .book-item.adjacent {
+    opacity: 0.8;
+  }
+
+  .book-item.far {
+    opacity: 0.35;
+  }
+
+  /* Active title overlay */
+  .book-title-overlay {
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    padding: 6px 4px;
+    font-size: 9px;
+    line-height: 1.3;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%);
+    letter-spacing: 0.02em;
+  }
+
+  /* No books */
+  .no-books {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding-left: 0.25rem;
+  }
+
+  /* Shelf section */
+  .shelf-section {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .shelf-section:nth-child(1) { animation-delay: 0.05s; }
+  .shelf-section:nth-child(2) { animation-delay: 0.12s; }
+  .shelf-section:nth-child(3) { animation-delay: 0.19s; }
+  .shelf-section:nth-child(4) { animation-delay: 0.26s; }
+  .shelf-section:nth-child(5) { animation-delay: 0.33s; }
+  .shelf-section:nth-child(6) { animation-delay: 0.40s; }
+
+  /* Shelf floor line */
+  .shelf-floor {
+    height: 3px;
+    background: linear-gradient(to right, transparent, var(--amber), transparent);
+    margin-top: 0.75rem;
+    border-radius: 2px;
+    opacity: 0.35;
+  }
+</style>
+
+<div class="shelf-wrapper">
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="d-flex gap-2">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+    <span>Curating your library…</span>
   </div>
 
-</div>
+  <!-- Genre Carousels -->
+  <div *ngIf="!isLoading" class="d-flex flex-column gap-5">
 
-<!-- Reusable Carousel Template -->
-<ng-template #carouselTpl let-genre>
-  <ng-container *ngIf="getBooksForGenre(genre) as shelf">
-
-    <!-- No results -->
-    <div *ngIf="shelf.length === 0" class="text-muted ps-1" style="font-size:13px;">
-      No books in this category.
+    <!-- Recommended -->
+    <div class="shelf-section">
+      <div class="shelf-label">
+        ✦ Recommended for You
+        <span class="genre-pill">Handpicked</span>
+      </div>
+      <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: 'recommended' }"/>
+      <div class="shelf-floor"></div>
     </div>
 
-    <!-- Carousel -->
-    <div *ngIf="shelf.length > 0"
-      class="d-flex align-items-center justify-content-center gap-3">
+    <!-- One per genre -->
+    <div *ngFor="let genre of genres; let gi = index" class="shelf-section">
+      <div class="shelf-label">
+        {{ genre | titlecase }}
+        <span class="genre-pill">{{ getBooksForGenre(genre).length }} books</span>
+      </div>
+      <ng-container *ngTemplateOutlet="carouselTpl; context: { $implicit: genre }"/>
+      <div class="shelf-floor"></div>
+    </div>
 
-      <!-- Left Arrow -->
-      <button
-        class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
-        style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
-        (click)="prevShelf(genre)"
-        [disabled]="getCurrentIndex(genre) === 0">
-        &#8249;
-      </button>
+  </div>
 
-      <!-- Book Boxes -->
-      <div class="d-flex align-items-center gap-3 overflow-hidden">
-        <div
-          *ngFor="let book of shelf; let i = index"
-          class="rounded-3 overflow-hidden d-flex flex-column align-items-center justify-content-end"
-          [ngClass]="{
-            'shadow border-0': getShelfClass(genre, i) === 'active',
-            'border opacity-75':  getShelfClass(genre, i) === 'adjacent',
-            'border opacity-40':  getShelfClass(genre, i) === 'far'
-          }"
-          [ngStyle]="{
-            width:      getShelfSize(genre, i) + 'px',
-            height:     getShelfSize(genre, i) * 1.5 + 'px',
-            cursor:     'pointer',
-            transition: 'all 0.3s cubic-bezier(0.34,1.2,0.64,1)',
-            backgroundImage: 'url(' + getCover(book) + ')',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }"
-          (click)="setCurrentShelf(genre, i); onBookClick(book)">
+  <!-- Carousel Template -->
+  <ng-template #carouselTpl let-genre>
+    <ng-container *ngIf="getBooksForGenre(genre) as shelf">
 
-          <!-- Title on active -->
-          <div
-            *ngIf="getShelfClass(genre, i) === 'active'"
-            class="w-100 text-white text-center px-1 py-1"
-            style="background: rgba(0,0,0,0.55); font-size:10px; line-height:1.2;">
-            {{ book.title | slice:0:40 }}{{ book.title.length > 40 ? '...' : '' }}
-          </div>
-
-        </div>
+      <div *ngIf="shelf.length === 0" class="no-books">
+        No books found in this category.
       </div>
 
-      <!-- Right Arrow -->
-      <button
-        class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center"
-        style="width:42px; height:42px; font-size:20px; flex-shrink:0;"
-        (click)="nextShelf(genre)"
-        [disabled]="getCurrentIndex(genre) === shelf.length - 1">
-        &#8250;
-      </button>
+      <div *ngIf="shelf.length > 0"
+        class="d-flex align-items-center justify-content-center gap-3">
 
-    </div>
-  </ng-container>
-</ng-template>
+        <!-- Left Arrow -->
+        <button
+          class="shelf-arrow"
+          (click)="prevShelf(genre)"
+          [disabled]="getCurrentIndex(genre) === 0">
+          &#8249;
+        </button>
+
+        <!-- Books -->
+        <div class="d-flex align-items-flex-end gap-3 overflow-hidden" style="align-items:flex-end;">
+          <div
+            *ngFor="let book of shelf; let i = index"
+            class="book-item"
+            [class.active]="getShelfClass(genre, i) === 'active'"
+            [class.adjacent]="getShelfClass(genre, i) === 'adjacent'"
+            [class.far]="getShelfClass(genre, i) === 'far'"
+            [ngStyle]="{
+              width:           getShelfSize(genre, i) + 'px',
+              height:          getShelfSize(genre, i) * 1.5 + 'px',
+              backgroundImage: 'url(' + getCover(book) + ')'
+            }"
+            (click)="setCurrentShelf(genre, i); onBookClick(book)">
+
+            <div
+              *ngIf="getShelfClass(genre, i) === 'active'"
+              class="book-title-overlay">
+              {{ book.title | slice:0:40 }}{{ book.title.length > 40 ? '…' : '' }}
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button
+          class="shelf-arrow"
+          (click)="nextShelf(genre)"
+          [disabled]="getCurrentIndex(genre) === shelf.length - 1">
+          &#8250;
+        </button>
+
+      </div>
+    </ng-container>
+  </ng-template>
+
+</div>
