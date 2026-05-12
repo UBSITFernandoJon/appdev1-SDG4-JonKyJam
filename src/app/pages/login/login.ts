@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EducationService } from '../../services/education.service';
 import { BookSearchResponse } from '../../models/book.model';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   imports: [CommonModule],
@@ -12,6 +12,8 @@ import { BookSearchResponse } from '../../models/book.model';
 export class Login implements OnInit {
 
   private educationService = inject(EducationService);
+  private router = inject(Router);
+
 
   books: any[] = [];
   recommendedBooks: any[] = [];
@@ -26,6 +28,11 @@ export class Login implements OnInit {
     'fantasy',
     'biography',
   ];
+
+  onBookClick(book: any): void {
+  const id = book.key?.replace('/works/', '') ?? 'unknown';
+  this.router.navigate(['/resource', id], { state: { book } });
+}
 
   ngOnInit(): void {
     const results: Record<string, any[]> = {};
