@@ -1,3 +1,55 @@
+<section class="py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+
+      <div class="card shadow-sm p-4">
+
+        
+        <div class="text-center mb-4">
+          <h2 class="fw-bold text-success">Login</h2>
+          <p class="text-muted small">
+            Sign in to access your dashboard and explore our educational resources.
+          </p>
+        </div>
+        <div class="alert alert-danger py-2" *ngIf="errorMsg">
+          {{ errorMsg }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter username"
+            [value]="username"
+            (input)="onUsernameInput($event)"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Enter password"
+            [value]="password"
+            (input)="onPasswordInput($event)"
+            (keyup.enter)="onLogin()"
+          />
+        </div>
+
+        
+        <div class="alert alert-info py-2 small">
+          💡 Hint: username = <strong>admin</strong>
+          / password = <strong>sdg4</strong>
+        </div>
+
+        
+        <button
+          class="btn btn-success w-100 mt-2"
+          (click)="onLogin()">
+          Log In
+        </button>
+
+      </div>
 <!-- Fonts -->
 <!--<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">-->
 
@@ -225,6 +277,7 @@
     </div>
 
   </div>
+</section>
 
   <!-- Carousel Template -->
   <ng-template #carouselTpl let-genre>

@@ -11,6 +11,7 @@ export class EducationService {
   private http = inject(HttpClient);
   private baseUrl = 'https://openlibrary.org';
 
+  
   // Search by subject 
   searchBooks(subject: string): Observable<BookSearchResponse> {
     return this.http
@@ -26,7 +27,7 @@ export class EducationService {
       );
   }
 
-  // Search by title or keyword
+ 
   searchByQuery(query: string): Observable<BookSearchResponse> {
     return this.http
       .get<BookSearchResponse>(
